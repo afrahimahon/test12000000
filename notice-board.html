@@ -1,58 +1,107 @@
-<!-- CLEAN NOTICE BOARD COMPONENT -->
-<div class="notice-board glass" style="margin-bottom:1.6rem;">
-  <div class="g-f"></div><div class="g-o"></div><div class="g-s"></div>
-  <div class="g-c nb-inner" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:10px 14px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin:0; font-family: "Plus Jakarta Sans", sans-serif; }
+    .notice-board {
+      background: var(--gc-bg, rgba(255,255,255,0.06));
+      border: 1px solid var(--border-2, rgba(255,255,255,0.15));
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: var(--R-glass, 0 8px 32px rgba(0,0,0,0.3));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .nb-icon { font-size: 1.4rem; }
+    select, button { 
+      background: var(--gc-bg, rgba(255,255,255,0.1)); 
+      border: 1px solid var(--border, rgba(255,255,255,0.2)); 
+      color: var(--brand, #D63651); 
+      padding: 6px 10px; 
+      border-radius: 6px; 
+      font-weight: 700; 
+      font-size: 0.8rem;
+    }
+    #nbText {
+      flex: 1;
+      font-weight: 500;
+      color: var(--text-2, #B8B2A8);
+      font-size: 0.9rem;
+      min-height: 1.4em;
+    }
+    #allNotices {
+      margin-top: 12px;
+      padding: 14px;
+      background: var(--bg-card, rgba(255,255,255,0.08));
+      border-radius: 12px;
+      border: 1px solid var(--border-2);
+    }
+  </style>
+</head>
+<body>
 
-    <span style="font-size:1.35rem;">📢</span>
+<div class="notice-board glass">
+  <span class="nb-icon">📢</span>
+  
+  <select id="noticeTag">
+    <option>LIVE</option>
+    <option>NEW</option>
+    <option>SOON</option>
+    <option>UPDATE</option>
+  </select>
 
-    <select id="tagSelect" style="padding:5px 10px; border-radius:6px; background:rgba(214,54,81,0.1); border:1px solid #D63651; color:#D63651; font-weight:700;">
-      <option>LIVE 🔥</option>
-      <option>NEW ✨</option>
-      <option>SOON 🚀</option>
-      <option>UPDATE ❤️</option>
-    </select>
+  <span id="nbText">EP 04 with BUET topper drops tomorrow 8 PM 🔥 Register now!</span>
 
-    <span id="noticeText" style="flex:1; font-weight:500; font-size:0.92rem; color:var(--text-2,#B8B2A8);">
-      EP 04 with BUET topper drops tomorrow 8 PM 🔥 Register now!
-    </span>
-
-    <button onclick="cycleNotice()" style="padding:6px 12px; background:none; border:1px solid var(--border); border-radius:50%; font-size:1.1rem;">↻</button>
-    <button onclick="showAllNotices()" style="padding:6px 14px; font-size:0.78rem; background:rgba(214,54,81,0.15); border:none; border-radius:6px;">All ↓</button>
-  </div>
+  <button onclick="cycleNotice()">↻</button>
+  <button onclick="showAllNotices()">All Updates ↓</button>
 </div>
 
-<div id="allPanel" style="display:none; padding:14px; background:var(--bg-card); border-radius:14px; margin:8px 0;">
-  <h4 style="color:#D63651; margin-bottom:10px;">📌 All Announcements</h4>
-  <div id="listContainer"></div>
+<div id="allNotices" style="display:none;">
+  <h4 style="color:var(--brand);margin:8px 0 10px;">📌 All Announcements</h4>
+  <div id="fullList"></div>
 </div>
 
 <script>
-  const messages = [
+  const notices = [
     "EP 04 with BUET topper drops tomorrow 8 PM 🔥 Register now!",
-    "Medical Admission Crash Course – Batch 2 registration open",
-    "Prepway Android App Beta releasing 25 March 2026",
-    "Website upgraded with separate notice board ❤️ Thank you for testing!",
-    "HSC Preparation Series starts next week – Stay tuned!"
+    "Medical Admission Crash Course – Batch 2 open for registration",
+    "Prepway Android App Beta releasing on 25 March 2026",
+    "Website upgraded with separate notice board ❤️ You are testing it now!",
+    "Special Episode on HSC Preparation coming this weekend"
   ];
-  let i = 0;
 
-  function cycleNotice() {
-    i = (i + 1) % messages.length;
-    document.getElementById("noticeText").textContent = messages[i];
+  let index = 0;
+
+  function showNotice() {
+    document.getElementById("nbText").textContent = notices[index];
   }
 
-  function showAllNotices() {
+  window.cycleNotice = function() {
+    index = (index + 1) % notices.length;
+    showNotice();
+  };
+
+  window.showAllNotices = function() {
     let html = "";
-    messages.forEach(msg => {
-      html += `<p style="margin:8px 0; padding:6px; background:rgba(255,255,255,0.05); border-left:3px solid #D63651;">• ${msg}</p>`;
+    notices.forEach((text, i) => {
+      html += `<div style="padding:10px 0; border-bottom:1px dashed #666;">• <strong>${i+1}.</strong> ${text}</div>`;
     });
-    document.getElementById("listContainer").innerHTML = html;
-    document.getElementById("allPanel").style.display = "block";
-  }
+    document.getElementById("fullList").innerHTML = html;
+    document.getElementById("allNotices").style.display = "block";
+  };
 
-  // Auto cycle + first load
-  window.onload = () => {
-    document.getElementById("noticeText").textContent = messages[0];
-    setInterval(cycleNotice, 5800);
+  // Auto start
+  window.onload = function() {
+    showNotice();
+    setInterval(() => {
+      window.cycleNotice();
+    }, 5500);
+    console.log("✅ notice-board.html loaded successfully");
   };
 </script>
+
+</body>
+</html>
