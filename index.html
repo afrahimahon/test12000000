@@ -2953,13 +2953,6 @@ window.toggleStoryCard = function(card){
 
 /* Theme toggle from pill nav */
 
-// ==================== LOAD SEPARATE NOTICE BOARD ====================
-fetch('notice-board.html')
-  .then(response => response.text())
-  .then(html => {
-    document.getElementById('notice-placeholder').innerHTML = html;
-  })
-  .catch(err => console.log("Notice board failed to load (check file name)", err));
 </script>
 <!-- ══════════ FLOATING MESSENGER ══════════ -->
 <!-- Messenger FAB — fixed bottom right, visible on all pages -->
