@@ -2129,7 +2129,6 @@ footer{
   <div class="hero-left">
    <!-- Notice Board will be loaded here -->
 <div id="notice-placeholder"></div>
-
     <div class="slogan-wrap" id="slogan-wrap">
 
       <!-- Bengali — slides in above, pushes English down -->
@@ -2534,6 +2533,11 @@ footer{
 </footer>
 
 <script>
+  fetch('notice-board.html')
+  .then(r => r.text())
+  .then(data => {
+    document.getElementById('notice-placeholder').innerHTML = data;
+  });
 /* ══ Theme toggle ══ */
 const root=document.documentElement;
 const tDesk=document.getElementById('tDesk');
